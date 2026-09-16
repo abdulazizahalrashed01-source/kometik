@@ -1,26 +1,303 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
+
+/* =========================================================
+   KOMETIK DESIGN SYSTEM
+   ========================================================= */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Luxury Editorial */
+  --olive: #66705A;
+  --olive-dark: #4F5946;
+
+  --brick: #B76552;
+  --brick-dark: #984C3E;
+
+  --cream: #F4F0E8;
+  --sand: #DED5C8;
+  --crr:white;
+  --ink: #171717;
+  --editorial-white: #FCFAF6;
+
+  --font-body: "Cairo", Arial, Helvetica, sans-serif;
+  --font-editorial: "Playfair Display", Georgia, serif;
+
+  --shadow-luxury: 0 18px 55px rgba(23, 23, 23, 0.08);
+  --shadow-luxury-lg: 0 30px 90px rgba(23, 23, 23, 0.12);
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-editorial: 800ms;
+
+  /* Olive palette */
+  --olive-50: #f7f8f3;
+  --olive-100: #eef0e6;
+  --olive-200: #dde1d0;
+  --olive-300: #c8ceb5;
+  --olive-400: #adb69a;
+  --olive-500: #929d7d;
+  --olive-600: #778363;
+  --olive-700: #5f6b50;
+  --olive-800: #4b553f;
+  --olive-900: #39412f;
+
+  /* Brick palette */
+  --brick-50: #fdf6f3;
+  --brick-100: #f8e8e3;
+  --brick-200: #efccc3;
+  --brick-300: #e2aa9c;
+  --brick-400: #cd8776;
+  --brick-500: #b96b59;
+  --brick-600: #a65443;
+  --brick-700: #8d4436;
+  --brick-800: #72392f;
+  --brick-900: #5d3029;
+
+  /* General */
+  --background: var(--cream);
+  --foreground: var(--ink);
+
+  --surface: #ffffff;
+  --surface-soft: var(--olive-100);
+
+  --border: var(--olive-200);
+  --border-strong: var(--olive-300);
+
+  --muted: var(--olive-700);
+  --muted-soft: var(--olive-600);
+
+  /* Brand */
+  --primary: var(--brick-600);
+  --primary-hover: var(--brick-700);
+  --primary-soft: var(--brick-100);
+  --primary-border: var(--brick-200);
+
+  --secondary: var(--olive-700);
+  --secondary-hover: var(--olive-800);
+  --secondary-soft: var(--olive-100);
+  --secondary-border: var(--olive-200);
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+
+  /* Shadows */
+  --shadow-soft: 0 8px 30px rgba(57, 65, 47, 0.07);
+  --shadow-card: 0 10px 35px rgba(57, 65, 47, 0.10);
+
+  /* Transitions */
+  --transition-fast: 180ms ease;
+  --transition-normal: 280ms ease;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* =========================================================
+   BASE
+   ========================================================= */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--background);
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+
+
+::selection {
+  background: var(--brick-200);
+  color: var(--ink);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--olive-400) var(--cream);
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--brick);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   EDITORIAL HELPERS
+   ========================================================= */
+
+.kometik-editorial {
+  font-family: var(--font-editorial);
+}
+
+.kometik-balance {
+  text-wrap: balance;
+}
+
+/* =========================================================
+   KOMETIK CUSTOM DIVIDERS
+   ========================================================= */
+
+.kometik-divide-x > :not(:last-child) {
+  border-inline-end: 1px solid var(--olive-200);
+}
+
+.kometik-divide-y > :not(:last-child) {
+  border-bottom: 1px solid var(--olive-200);
+}
+
+/* =========================================================
+   SEARCH / MENU MOTION
+   ========================================================= */
+
+@keyframes searchDiscoveryIn {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes mobileMenuIn {
+  from {
+    opacity: 0.7;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =========================================================
+   HERO MOTION
+   ========================================================= */
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   MARQUEE
+   ========================================================= */
+
+@keyframes kometikMarquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* =========================================================
+   UTILITY HELPERS
+   ========================================================= */
+
+.kometik-hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.kometik-hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   KOMETIK SEPARATOR COLORS
+   Avoid Tailwind divide-* generated selectors.
+   ========================================================= */
+
+.kometik-separator-black > :not(:last-child) {
+  border-color: #000;
+}
+
+.kometik-separator-gray > :not(:last-child) {
+  border-color: var(--olive-200);
+}
+/* =========================================================
+   KOMETIK VERTICAL SPACING
+   Avoid Tailwind space-y-* generated selectors.
+   ========================================================= */
+
+.kometik-space-y-1 > :not(:last-child) {
+  margin-bottom: calc(var(--spacing) * 1);
+}
+
+.kometik-space-y-2 > :not(:last-child) {
+  margin-bottom: calc(var(--spacing) * 2);
+}
+
+.kometik-space-y-3 > :not(:last-child) {
+  margin-bottom: calc(var(--spacing) * 3);
+}
+
+.kometik-space-y-4 > :not(:last-child) {
+  margin-bottom: calc(var(--spacing) * 4);
+}
+
+.kometik-space-y-5 > :not(:last-child) {
+  margin-bottom: calc(var(--spacing) * 5);
+}
+
+.kometik-space-y-6 > :not(:last-child) {
+  margin-bottom: calc(var(--spacing) * 6);
+}
+
+.kometik-space-y-8 > :not(:last-child) {
+  margin-bottom: calc(var(--spacing) * 8);
+}
+
+.kometik-space-y-12 > :not(:last-child) {
+  margin-bottom: calc(var(--spacing) * 12);
 }

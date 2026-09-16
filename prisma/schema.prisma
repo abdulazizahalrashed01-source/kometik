@@ -1,0 +1,254 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                      String                   @id @default(cuid())
+  name                    String?
+  email                   String                   @unique
+  password                String
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  role                    Role                     @default(USER)
+  imageUrl                String?
+  emailVerifiedAt         DateTime?
+  googleId                String?                  @unique
+  addresses               Address[]
+  blogPosts               BlogPost[]
+  emailVerificationTokens EmailVerificationToken[]
+  orders                  Order[]
+  passwordResetTokens     PasswordResetToken[]
+  wishlistItems           WishlistItem[]
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  codeHash  String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  userId     String
+  name       String
+  address    String
+  city       String
+  postalCode String
+  phone      String
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  parentId  String?
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryTree")
+  products  Product[]
+
+  @@index([parentId])
+}
+
+model Product {
+  id            String              @id @default(cuid())
+  name          String
+  description   String?
+  price         Float
+  imageUrl      String?
+  categoryId    String
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  imagePublicId String?
+  stock         Int                 @default(0)
+  blogPosts     BlogPostProduct[]
+  orderItems    OrderItem[]
+  category      Category            @relation(fields: [categoryId], references: [id])
+  collections   ProductCollection[]
+  tags          ProductTag[]
+  wishlistItems WishlistItem[]
+}
+
+model Tag {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  slug        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  collections Collection[]
+  products    ProductTag[]
+}
+
+model ProductTag {
+  productId String
+  tagId     String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+}
+
+model Collection {
+  id            String              @id @default(cuid())
+  name          String
+  slug          String              @unique
+  description   String?
+  imageUrl      String?
+  imagePublicId String?
+  active        Boolean             @default(true)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  tagId         String?
+  type          CollectionType      @default(MANUAL)
+  tag           Tag?                @relation(fields: [tagId], references: [id])
+  products      ProductCollection[]
+}
+
+model ProductCollection {
+  productId    String
+  collectionId String
+  sortOrder    Int        @default(0)
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([productId, collectionId])
+}
+
+model Order {
+  id                 String      @id @default(cuid())
+  userId             String?
+  customerName       String
+  customerEmail      String
+  customerPhone      String
+  shippingAddress    String
+  shippingCity       String
+  shippingPostalCode String
+  subtotal           Float
+  shipping           Float
+  total              Float
+  status             OrderStatus @default(PENDING)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  user               User?       @relation(fields: [userId], references: [id])
+  items              OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  name      String
+  price     Float
+  quantity  Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model BlogCategory {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  posts       BlogPost[]
+
+  @@index([slug])
+}
+
+model BlogPost {
+  id                 String            @id @default(cuid())
+  title              String
+  slug               String            @unique
+  excerpt            String?
+  content            String
+  coverImageUrl      String?
+  coverImagePublicId String?
+  seoTitle           String?
+  seoDescription     String?
+  featured           Boolean           @default(false)
+  published          Boolean           @default(false)
+  publishedAt        DateTime?
+  categoryId         String
+  authorId           String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  author             User?             @relation(fields: [authorId], references: [id])
+  category           BlogCategory      @relation(fields: [categoryId], references: [id])
+  products           BlogPostProduct[]
+
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([published])
+  @@index([featured])
+  @@index([publishedAt])
+}
+
+model BlogPostProduct {
+  postId    String
+  productId String
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([postId, productId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum CollectionType {
+  MANUAL
+  TAG
+}

@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+*.bak
 
 # debug
 npm-debug.log*
@@ -30,7 +31,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
 
 # vercel
@@ -39,3 +40,21 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# prisma generated
+/src/generated/prisma
+
+# local AI/editor tooling
+/.agents/
+/.claude/
+/.windsurf/
+/.vscode/
+
+# local capacitor build
+/capacitor-web/
+
+# local reference files
+/flutter_api_contract.txt
+/skills-lock.json
+/????.txt
+/????1.txt
