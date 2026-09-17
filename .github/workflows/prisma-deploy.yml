@@ -27,16 +27,13 @@ jobs:
 
       - uses: prisma/cloud-deploy-action@v1
         env:
-          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           JWT_SECRET: build-only-dummy-secret
-
           NEXT_PUBLIC_GOOGLE_CLIENT_ID: build-only-google-client-id
-
           SMTP_HOST: localhost
           SMTP_PORT: "587"
           SMTP_USER: build@example.com
           SMTP_PASSWORD: build-only-smtp-password
           SMTP_FROM: build@example.com
-
         with:
           build-command: npm run build
