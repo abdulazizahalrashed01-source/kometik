@@ -1,4 +1,4 @@
-name: prisma-deploy
+﻿name: prisma-deploy
 
 on:
   push:
@@ -26,5 +26,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - uses: prisma/cloud-deploy-action@v1
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
         with:
           build-command: npm run build
