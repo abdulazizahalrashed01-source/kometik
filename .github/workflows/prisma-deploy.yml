@@ -28,5 +28,6 @@ jobs:
       - uses: prisma/cloud-deploy-action@v1
         env:
           DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+          JWT_SECRET: build-only-dummy-secret
         with:
           build-command: npm run build
