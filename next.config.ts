@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: "C:/Users/abdal/Desktop/projects/js/next js/new kosmetik/kometik-new",
-  },
+  output: "standalone",
+
   images: {
     remotePatterns: [
        {
